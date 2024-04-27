@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Card Generation</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="cardContainer" class="container"></div>
+
+<script>
+  // Function to generate card HTML
+  function generateCard() {
+    return `
+      <div class="card" style="width: 18rem;">
+        <img src="images/back.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    `;
+  }
+
+  // Function to generate and append cards to the container
+  function generateCards(count) {
+    const container = document.getElementById('cardContainer');
+    for (let i = 0; i < count; i++) {
+      const cardHTML = generateCard();
+      container.innerHTML += cardHTML;
+    }
+  }
+
+  // Generate 10 cards
+  generateCards(10);
+
+</script>
+<script type="importmap">
+    {
+      "imports": {
+        "@google/generative-ai": "https://esm.run/@google/generative-ai"
+      }
+    }
+  </script>
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
+
+    // Fetch your API_KEY
+    const API_KEY = "AIzaSyAaA0RC_aJ3_ZQxc2Y5QZZYU0C2WuuqBJ8";
+
+    // Access your API key (see "Set up your API key" above)
+    const genAI = new GoogleGenerativeAI(API_KEY);
+
+
+async function run() {
+  // For text-only input, use the gemini-pro model
+  const model = genAI.getGenerativeModel({ model: "gemini-pro"});
+
+  const prompt = "Write a story about a magic backpack."
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const text = response.text();
+  console.log(text);
+}
+
+run();
+  </script>
+
+</body>
+</html>
